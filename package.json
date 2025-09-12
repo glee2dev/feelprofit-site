@@ -10,5 +10,11 @@
   },
   "dependencies": {
     "astro": "^5.13.7"
+  },
+  "devDependencies": {
+    "@astrojs/mdx": "^4.3.5",
+    "@astrojs/sitemap": "^3.5.1",
+    "@tailwindcss/vite": "^4.1.13",
+    "tailwindcss": "^4.1.13"
   }
 }

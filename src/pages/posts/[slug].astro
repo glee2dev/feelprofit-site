@@ -1,0 +1,30 @@
+---
+import Layout from "../../components/Layout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+// 1) Build-time: enumerate all post slugs and pass each entry as a prop
+export async function getStaticPaths() {
+  const entries = await getCollection("posts");
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },     // URL: /posts/<slug>/
+    props: { entry },                  // pass the whole entry to the page
+  }));
+}
+
+// 2) Runtime (per page): render the passed entry
+const { entry } = Astro.props as { entry: CollectionEntry<"posts"> };
+const { Content } = await entry.render();
+const d = entry.data;
+---
+
+<Layout title={`${d.title} — FeelProfit`} description={d.summary} ogImage={d.hero}>
+  <article class="prose max-w-none">
+    <h1 class="mb-2">{d.title}</h1>
+    <div class="text-sm text-slate-500">
+      {d.date.toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" })}
+    </div>
+    <div class="mt-6">
+      <Content />
+    </div>
+  </article>
+</Layout>

@@ -1,0 +1,94 @@
+---
+import "../styles/global.css";
+
+const {
+  title = "FeelProfit",
+  description = "Practical life upgrades: Money, AI tools, Family.",
+  ogImage = "/images/og/default.png",
+} = Astro.props;
+
+const GA_ID = import.meta.env.PUBLIC_GA_ID;               // optional
+const SC_VERIFICATION = import.meta.env.PUBLIC_SC_VERIFICATION; // optional
+---
+
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site ?? "https://feelprofit.com").toString()} />
+
+    <!-- OG -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={Astro.url.href} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {SC_VERIFICATION && <meta name="google-site-verification" content={SC_VERIFICATION} />}
+
+    {GA_ID && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date()); gtag('config', '{GA_ID}');
+        </script>
+      </>
+    )}
+  </head>
+
+  <body class="min-h-screen bg-white text-slate-900 antialiased">
+    <header class="sticky top-0 z-40 backdrop-blur bg-white/70 border-b border-slate-200">
+      <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <a href="/" class="font-extrabold tracking-tight text-xl">FeelProfit</a>
+        <ul class="flex gap-5 text-sm font-medium">
+          <li><a class="hover:text-slate-700" href="/money/">Money</a></li>
+          <li><a class="hover:text-slate-700" href="/ai-tools/">AI Tools</a></li>
+          <li><a class="hover:text-slate-700" href="/family/">Family</a></li>
+          <li><a class="hover:text-slate-700" href="/about">About</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+      <slot />
+    </main>
+
+    <footer class="border-t border-slate-200">
+      <div class="max-w-6xl mx-auto px-4 py-10 grid lg:grid-cols-3 gap-6">
+        <div>
+          <div class="font-extrabold text-lg">FeelProfit</div>
+          <p class="text-sm text-slate-600 mt-2">
+            Practical life upgrades across Money, AI tools, and Family.
+          </p>
+        </div>
+        <div>
+          <div class="font-semibold">Hubs</div>
+          <ul class="mt-2 text-sm space-y-1">
+            <li><a href="/money/" class="hover:underline">Money</a></li>
+            <li><a href="/ai-tools/" class="hover:underline">AI Tools</a></li>
+            <li><a href="/family/" class="hover:underline">Family</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-semibold">Newsletter</div>
+          <p class="text-sm text-slate-600 mt-2">1 useful read + 1 tool + 1 deal, weekly.</p>
+          <div class="mt-3">
+            <slot name="newsletter" />
+          </div>
+        </div>
+      </div>
+      <div class="text-center text-xs text-slate-500 pb-8">© {new Date().getFullYear()} FeelProfit. Some links may be affiliate.</div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+feelprofit/
+  public/
+    images/og/default.png         # placeholder hero
+    favicon.svg
+    robots.txt
+  src/
+    components/
+      Layout.astro
+      PostCard.astro
+      CTAAffiliate.astro
+      NewsletterInline.astro
+    content/
+      posts/
+        hello-feelprofit.mdx
+    lib/
+      offers.ts
+    pages/
+      index.astro
+      money/index.astro
+      ai-tools/index.astro
+      family/index.astro
+      posts/[slug].astro
+    styles/
+      global.css
+    content.config.ts
+  astro.config.mjs
+  netlify.toml

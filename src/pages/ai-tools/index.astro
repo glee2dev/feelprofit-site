@@ -1,0 +1,26 @@
+---
+import Layout from "../../components/Layout.astro";
+import PostCard from "../../components/PostCard.astro";
+import { getCollection } from "astro:content";
+
+const entries = await getCollection("posts", (p) => p.data.hub === "ai-tools" && !p.data.draft);
+const posts = entries
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((e) => ({
+    href: `/posts/${e.slug}/`,
+    title: e.data.title,
+    summary: e.data.summary,
+    date: e.data.date,
+    tags: e.data.tags,
+    hero: e.data.hero,
+  }));
+---
+
+<Layout title="AI Tools — FeelProfit" description="Best AI tools, automations, and prompts.">
+  <h1 class="text-2xl font-extrabold">AI Tools</h1>
+  <p class="text-slate-600 mt-2">Automation guides, prompt packs, and low-cost workflows.</p>
+
+  <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {posts.map((p) => <PostCard {...p} />)}
+  </div>
+</Layout>

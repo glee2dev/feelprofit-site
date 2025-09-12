@@ -1,16 +1,57 @@
 ---
+import Layout from "../components/Layout.astro";
+import PostCard from "../components/PostCard.astro";
+import NewsletterInline from "../components/NewsletterInline.astro";
+import { getCollection } from "astro:content";
 
+const entries = await getCollection("posts", (p) => !p.data.draft);
+const posts = entries
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 12)
+  .map((e) => ({
+    href: `/posts/${e.slug}/`,
+    title: e.data.title,
+    summary: e.data.summary,
+    date: e.data.date,
+    tags: e.data.tags,
+    hero: e.data.hero,
+  }));
+
+const hubs = [
+  { href: "/money/", title: "Money", desc: "Budgeting, cashback, beginner investing." },
+  { href: "/ai-tools/", title: "AI Tools", desc: "Automation, time-savers, prompt packs." },
+  { href: "/family/", title: "Family", desc: "Baby checklists, pet essentials, routines." },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="FeelProfit — Practical Life Upgrades" description="Popular tips & tools across Money, AI, and Family.">
+  <section class="text-center py-8">
+    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Practical Life Upgrades</h1>
+    <p class="mt-3 text-slate-600">Popular topics → actionable guides → affiliates & simple products.</p>
+    <div class="mt-6 max-w-xl mx-auto">
+      <NewsletterInline slot="newsletter" />
+    </div>
+  </section>
+
+  <section class="grid sm:grid-cols-3 gap-4">
+    {hubs.map((h) => (
+      <a href={h.href} class="rounded-2xl border border-slate-200 p-5 hover:shadow-sm transition block">
+        <div class="font-bold">{h.title}</div>
+        <p class="text-sm text-slate-600 mt-1">{h.desc}</p>
+        <div class="mt-3 text-sm text-slate-900/70">Explore →</div>
+      </a>
+    ))}
+  </section>
+
+  <section class="mt-10">
+    <div class="flex items-center justify-between">
+      <h2 class="text-xl font-bold">Latest Posts</h2>
+      <a class="text-sm text-slate-600 hover:underline" href="/money/">View all hubs</a>
+    </div>
+    <div class="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {posts.map((p) => (
+        <PostCard {...p} />
+      ))}
+    </div>
+  </section>
+</Layout>
